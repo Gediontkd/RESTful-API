@@ -78,5 +78,3 @@ Creates a new task.
 
 - Framework: Express.js
 - Database: SQLite
-- Error Handling: Global error handling middleware
-- Input Validation: Basic validation for required fields
