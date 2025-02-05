@@ -5,7 +5,11 @@ A simple RESTful API for managing tasks built with Node.js, Express.js, and SQLi
 ## Setup Instructions
 
 1. Clone the repository
-2. Install dependencies:
+2. Navigate to the project directory:
+   ```bash
+   cd RESTful-API/
+   ```
+3. Install dependencies:
    ```bash
    npm install
    ```
