@@ -25,6 +25,7 @@ npm run dev
 
 The server will start on port 3000 by default. The SQLite database will be created automatically as `tasks.db` in the root directory.
 
+
 ## API Documentation
 
 ### GET /tasks
