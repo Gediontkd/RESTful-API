@@ -4,7 +4,10 @@ A simple RESTful API for managing tasks built with Node.js, Express.js, and SQLi
 
 ## Setup Instructions
 
-1. Clone the repository
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Gediontkd/RESTful-API.git
+   ```
 2. Navigate to the project directory:
    ```bash
    cd RESTful-API/
