@@ -1,53 +1,49 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const mysql = require('mysql2/promise');
 
-// Create database connection
-const dbPath = path.resolve(__dirname, '../../tasks.db');
-const db = new sqlite3.Database(dbPath);
+// Create MySQL connection pool
+const pool = mysql.createPool({
+  host: 'localhost',  
+  user: 'root',
+  password: 'root',
+  database: 'tasks'
+});
 
-const initializeDatabase = () => {
-  return new Promise((resolve, reject) => {
-    db.run(`
+// Initialize database
+const initializeDatabase = async () => {
+  try {
+    const connection = await pool.getConnection();
+    await connection.query(`
       CREATE TABLE IF NOT EXISTS tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
         description TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
-    `, (err) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve();
-    });
-  });
+    `);
+    connection.release();
+  } catch (error) {
+    console.error('Database initialization failed:', error);
+  }
 };
 
-const getAllTasks = () => {
-  return new Promise((resolve, reject) => {
-    db.all('SELECT * FROM tasks ORDER BY created_at DESC', [], (err, rows) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(rows);
-    });
-  });
+// Get all tasks
+const getAllTasks = async () => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM tasks ORDER BY created_at DESC');
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 };
 
-const createTask = (title, description) => {
-  return new Promise((resolve, reject) => {
-    const stmt = db.prepare('INSERT INTO tasks (title, description) VALUES (?, ?)');
-    stmt.run([title, description], function(err) {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(this.lastID);
-    });
-    stmt.finalize();
-  });
+// Create a new task
+const createTask = async (title, description) => {
+  try {
+    const [result] = await pool.query('INSERT INTO tasks (title, description) VALUES (?, ?)', [title, description]);
+    return result.insertId;
+  } catch (error) {
+    throw error;
+  }
 };
 
 module.exports = {
