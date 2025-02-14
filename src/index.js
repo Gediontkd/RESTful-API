@@ -6,7 +6,7 @@ const { initializeDatabase } = require('./database/db');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// middleware
 app.use(express.json());
 
 // Initialize database
